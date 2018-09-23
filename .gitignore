@@ -1,6 +1,12 @@
 # Prerequisites
 *.d
 
+# Exectable directory
+./bin/
+
+# Swap vim files
+.*.sw.*
+
 # Object files
 *.o
 *.ko

@@ -22,12 +22,12 @@ int main( void )
 
       if( fgets( p_input, MAX_INPUT_LENGTH, stdin ) != NULL )
       {
-         if( 0 == strcmp( "help\n\r", p_input ) )
+         if( 0 == strcmp( "help\n", p_input ) )
          {
             help();
             continue;
          }
-         else if( 0 == strcmp( "quit\n\r", p_input ) )
+         else if( 0 == strcmp( "quit\n", p_input ) )
          {
             if( 1 == allocated )
             {
@@ -39,14 +39,14 @@ int main( void )
             printf( "Exiting...");
             break;
          }
-         else if( ( 0 == allocated ) && ( 0 == strcmp( "allocate\n\r", p_input ) ) )
+         else if( ( 0 == allocated ) && ( 0 == strcmp( "allocate\n", p_input ) ) )
          {
             uint32_t nWords = getNumberOfWords();
             mem = allocate( nWords );
             allocated = 1;
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "free\n\r", p_input ) ) )
+         else if( ( 1 == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
          {
             printf( "Freeing %u byes of memory\n\r", size );
             free( mem );
@@ -83,7 +83,7 @@ void help( void )
    printf( "Hello and welcome!\n\r" );
    printf( "This utility allows the user to allocate memory\n\r" );
    printf( "for a specified number of 32-bit words, and do all\n\r" );
-   printf( "sorts of cool stuff with the allocated memory.\n\r\n\r" );
+   printf( "sorts of cool stuff with the allocated memory.\n\n\r" );
    printf( "For example, you can request to see the contents of a memory address\n\r" );
    printf( "you specify, and the number of 32-bit words to display.\n\r" );
    printf( "You can also write a non-negative value to a memory address.\n\r" );

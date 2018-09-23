@@ -6,18 +6,17 @@
 //#include "helper.h"
 int main( void )
 {
-   //char* p_input[MAX_INPUT_LENGTH];
    char* p_input = (char*) calloc( MAX_INPUT_LENGTH, sizeof( char* ) );
-   int firstTime = 0;
-   int allocated = 0;
-   void* mem;
+   uint8_t firstTime = 0;
+   uint8_t allocated = 0;
+   if( 0 == firstTime )
+   {
+      printf( "Hello and welcome! Enter 'help' for help menu\n" );
+      firstTime++;
+   }
+
    while( 1 )
    {
-      if( 0 == firstTime )
-      {
-         printf( "Hello and welcome! Enter 'help' for help menu\n" );
-         firstTime++;
-      }
       printf( "> " );
 
       if( fgets( p_input, MAX_INPUT_LENGTH, stdin ) != NULL )
@@ -29,12 +28,18 @@ int main( void )
          }
          else if( 0 == strcmp( "quit\n", p_input ) )
          {
+            if( 1 == allocated )
+            {
+               printf( "You have not freed memory!\n\r" );
+               printf( "Returning to prompt..\n\r" );
+               continue;
+            }
+            free( p_input );
             printf( "Exiting...");
             break;
          }
          else if( ( 0 == allocated ) && ( 0 == strcmp( "allocate\n", p_input ) ) )
          {
-            //printf( "How many 32-bit words should I allocate memory for?\n" );
             uint32_t nWords = getNumberOfWords();
             mem = allocate( nWords );
             allocated = 1;
@@ -61,14 +66,14 @@ int main( void )
 
 void* allocate( uint32_t nWords )
 {
-   char *mem;
+   void* mem;
    size = nWords * sizeof( uint32_t );
-   mem = (char *)malloc( size );
+   mem = malloc( size );
 
    printf( "Allocated %u bytes of memory for %d 32-bit words at adress %p.\n",
-               size, nWords, (void*)mem );
+               size, nWords, mem );
 
-   return (void*) mem;
+   return mem;
 }
 
 
@@ -123,6 +128,7 @@ void writeToMemory( void *p_address, uint32_t val )
    printf( "Writing value of %x to memory address\n", val );
    return;
 }
+
 uint32_t getNumberOfWords( void )
 {
    uint32_t nWords = 0;

@@ -1,2 +1,6 @@
-make:
-	gcc -o ./bin/main ./src/main.c -I. #-I.$(src)/inc/helper.h
+make: ./src/main.c ./inc/helper.h
+	mkdir -p ./bin/
+	gcc -o ./bin/main ./src/main.c -I.
+
+clean: 
+	rm -rf ./bin/

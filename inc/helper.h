@@ -4,8 +4,11 @@
 #define MAX_INPUT_LENGTH 20
 
 uint32_t size = 0;
+uint8_t notHex = 0;
 // Print help menu
 void help( void );
+
+uint32_t parseHex( void );
 
 // Get unsigned integer from stdin
 uint32_t getNumber( void );

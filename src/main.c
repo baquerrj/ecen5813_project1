@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../inc/helper.h"
+#include "../inc/memoryManipulation.h"
 //#include "helper.h"
 int main( void )
 {

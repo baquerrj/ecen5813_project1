@@ -1,5 +1,5 @@
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef MEMORY_MANIPULATION_H
+#define MEMORY_MANIPULATION_H
 
 #define MAX_INPUT_LENGTH 20
 
@@ -21,4 +21,4 @@ uint32_t getNumberOfWords( void );
 // 32-bit words. Returns pointer to memory location
 void* allocate( uint32_t nWords );
 
-#endif /* HELPER_H */
+#endif /* MEMORY_MANIPULATION_H */

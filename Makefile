@@ -1,6 +1,5 @@
-make: ./src/main.c ./inc/helper.h
-	mkdir -p ./bin/
+make: ./src/main.c ./inc/memoryManipulation.h
 	gcc -o ./bin/main ./src/main.c -I.
 
 clean: 
-	rm -rf ./bin/
+	rm ./bin/main.o

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../inc/memoryManipulation.h"
-//#include "helper.h"
+
 int main( void )
 {
    char* p_input = (char*) calloc( MAX_INPUT_LENGTH, sizeof( char* ) );

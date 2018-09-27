@@ -1,3 +1,15 @@
+/*
+
+
+
+
+References:  
+https://stackoverflow.com/questions/1398307/how-can-i-allocate-memory-and-return-it-via-a-pointer-parameter-to-the-calling
+*/
+
+
+
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,7 +20,7 @@ int main( void )
 {
   char* p_input = (char*) calloc( MAX_INPUT_LENGTH, sizeof( char* ) );
   uint8_t allocated = 0;
-  void* mem;
+  void* mem = NULL; //Addition of NULL
 
   printf( "Hello and welcome! Enter 'help' for help menu\n\r" );
   fflush( stdout );
@@ -40,7 +52,7 @@ int main( void )
         else if( ( 0 == allocated ) && ( 0 == strcmp( "allocate\n", p_input ) ) )
         {
           uint32_t nWords = getNumberOfWords();
-          mem = allocate( nWords );
+          allocate( &mem, nWords );
           allocated = 1;
           continue;
         }
@@ -65,17 +77,15 @@ int main( void )
    return 1;
 }
 
-void* allocate( uint32_t nWords )
+void allocate( void **mem, uint32_t nWords )
 {
-  void* mem;
+  
   size = nWords * sizeof( uint32_t );
   mem = malloc( size );
 
   printf( "Allocated %u bytes of memory for %d 32-bit words at adress %p.\n\r",
                size, nWords, mem );
   fflush( stdout );
-
-  return mem;
 }
 
 

@@ -19,6 +19,6 @@ uint32_t getNumberOfWords( void );
 
 // Allocate memory for specified number
 // 32-bit words. Returns pointer to memory location
-void* allocate( uint32_t nWords );
+void allocate( void **mem, uint32_t nWords );
 
 #endif /* MEMORY_MANIPULATION_H */

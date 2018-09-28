@@ -21,7 +21,7 @@ uint32_t getNumberOfWords( void );
 // 32-bit words. Returns pointer to memory location
 void allocate( void **mem, uint32_t nWords );
 
-//void writeAddress(void **mem, uint32_t nWords, uint8_t _64bitMachine );
+void writeAddress(void **mem, uint32_t value);
 
 uint32_t getValue(void);
 uint64_t getAddress(void);

@@ -70,6 +70,7 @@ int main( void )
           nWords = getNumberOfWords();
           allocate( &mem, nWords );
           allocated = 1;
+          //writeAddress(&mem, 10);
           continue;
         }
         else if( ( 1 == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
@@ -87,17 +88,27 @@ int main( void )
           printf("enter hexadecimal address to write to\n\r");
           fflush( stdout );
           address = getAddress();
-          printf("address: %"PRIu64",\n\r", address);
-          //if(address > (uint64_t)(*mem+(32*(nWords-1))))
-          //{
-          //    printf("address too high.  must be between the beginning\n\r");
-          //    printf("of allocated space and 32 bits less the end of allocated space\n\r")
-          //    fflush(stdout);
-          //    continue
-          //}else
-          //  {
-          //    writeaddress()
-          //  }
+          printf("address: %"PRIx64",\n\r", address);
+          printf("mem: %p,\n\r", (mem));
+          uint32_t* memUint32_ptr = (uint32_t*)mem;
+          printf("mem: %p,\n\r ",memUint32_ptr);
+          printf("mem: %"PRIx64",\n\r ",(uint64_t)(memUint32_ptr));
+          uint64_t memUint32 = (uint64_t)(memUint32_ptr);
+          printf("memUint32: %"PRIx64",\n\r ",memUint32);
+
+
+
+          //if((address >= ((uint64_t)(&mem)+(32*(nWords-1))))&& (address < (uint64_t)(memUint32_ptr+4)))//(uint64_t*)
+          if((address >= memUint32)&&(address < (memUint32+(32*(nWords-1)))))//(uint64_t*)
+          {
+             printf("address too high.  must be between the beginning\n\r");
+             printf("of allocated space and 32 bits less the end of allocated space\n\r");
+             fflush(stdout);
+             continue;
+          }else
+           {
+             writeAddress(&mem,value);
+           }
           continue;
         }
         else
@@ -182,10 +193,13 @@ void allocate( void **mem, uint32_t nWords )
 {
   
   size = nWords * sizeof( uint32_t );
-  *mem = malloc( nWords* sizeof(uint32_t) );
+    //char* p_input = (char*) calloc( MAX_INPUT_LENGTH, sizeof( char* ) );
+
+  *mem = calloc( nWords, sizeof(void*) );
 
   printf( "Allocated %u bytes of memory for %d 32-bit words at adress %p.\n\r",
                size, nWords, *mem );
+  
   fflush( stdout );
 }
 
@@ -233,118 +247,21 @@ uint32_t getNumber( void )
 return num;
 }
 
-void writeToMemory( void *p_address, uint32_t val )
+void writeAddress( void **mem, uint32_t value )
 {
-  printf( "Writing value of %x to memory address\n\r", val );
+  printf( "Writing value of %"PRIx32" to memory address\n\r", value );
+  printf("mem:%p\n\r ",mem);
+  printf("*mem:%p\n\r ",*mem);
+  printf("&mem:%p\n\r ",&mem);
+  printf("**mem:%"PRIx32"\n\r ",*(uint32_t*)(*mem));
+  *(uint32_t*)(*mem) = value;
+  printf("**mem:%"PRIx32"\n\r ",*(uint32_t*)(*mem));
+
   fflush( stdout );
   return;
 }
 
-// void writeAddress(void **mem, uint32_t nWords, uint8_t _64bitMachine )//pass pointer or pointer to pointer?
-// {
-//   printf("mem value passed: %p\n\r", mem);
-//   printf("mem value passed: %p\n\r", &mem);
-//   printf("mem value passed: %p\n\r", *mem);
-//   //printf("mem value passed: %p\n\r", **mem);
-//   //uint32_t memLowerLimit_uint = (uint32_t)mem;
-//   //uint32_t memUpperLimit_uint = memLowerLimit_uint + nWords*32;
-// // uint64_t memLowerLimit64_uint=0;
-// // uint64_t memUpperLimit64_uint=0;
-// // uint32_t memLowerLimit32_uint=0;
-// // uint32_t memUpperLimit32_uint=0;
-// //   //void* newMem = NULL;
-// //   if(_64bitMachine == TRUE)
-// //   {
-// //      memLowerLimit_uint = (uint64_t)*mem;
-// //      memUpperLimit_uint = memLowerLimit_uint + nWords*32;
-// //   }else
-// //     {
-// //        memLowerLimit_uint = (uint32_t)*mem;
-// //        memUpperLimit_uint = memLowerLimit_uint + nWords*32;
-// //     }
 
-//   //printf("memLowerLimit_uint: %d\n\r", memLowerLimit_uint);
-//   //printf("memUpperLimit_uint: %d\n\r", memUpperLimit_uint);
-//   //newMem = 
-//   printf( "address to write to?\n\r");
-//   fflush( stdout );
-//   char addr[16];
-//   uint8_t incr = 0;
-//   char ch;
-//   while( ((ch = getchar()) != '\n')&& incr != 16 )
-//   {
-    
-//     if( ('0' < ch || '9' > ch)||('a' < ch || 'f' > ch)||('A' < ch || 'F' > ch) )
-//     {
-//       addr[incr] = ch;
-//       printf("addr[%d]: %c\n\r", incr, addr[incr]);
-//       incr++;
-//     }
-//     else(printf("invalid input: legal entries are 0-9, a-f, A-F"));
-//     //i = atoi (num);
-//   }
-//   //while(incr !=0)addr--;
-
-//   if(_64bitMachine == TRUE)
-//   {
-//     char * pEnd;
-//     //char * pEnd2;
-//     uint64_t userInput =   strtoull (addr, &pEnd, 16);
-//     uint64_t memBegin = (uint64_t)*mem;
-//     printf("userInput: %d\n\r", (uint32_t)userInput);
-//     printf("memBegin: %d\n\r", (uint32_t)memBegin);
-//     while(userInput!=memBegin)
-//     {
-//       userInput = userInput - 32;
-//     }
-//     if(((userInput-memBegin) >0) && (((userInput - memBegin)%32)==0) && (userInput < (membegin + 32*nWords)) )
-//     {
-//       uint32_t num = 0;
-//       char ch;
-//       while( (ch = getchar()) != '\n' )
-//         {
-//           if( ch == '-' )
-//             {
-//               printf( "ERROR: Input cannot be a negative integer.\n\r" );
-//               fflush( stdout );
-//               return 0;
-//             }
-//           else if( ch == '.' )
-//             {
-//               printf( "ERROR: Input must be an integer, not a double.\n\r" );
-//               fflush( stdout );
-//               return 0;
-//             }
-//           if( '9' < ch || '0' > ch )
-//            {
-//              continue;
-//            }
-//           num *= 10;
-//           num += ch - '0';
-//         }
-
-//   }
-//   }else
-//     {
-//       char * pEnd;
-//       //char * pEnd2;
-//       uint32_t userInput =   strtoul (addr, &pEnd, 16);
-//       uint32_t memBegin = (uint32_t)(uint64_t)*mem;
-//       printf("userInput: %d\n\r", userInput);
-//       printf("memBegin: %d\n\r", memBegin);
-
-
-//     }
-// //  if(userInput == memBegin)
-// //  {
-// //    mem = userInput;
-// //  }
-
-
-
-
-//   return;
-// }
 
 uint32_t getNumberOfWords( void )
 {

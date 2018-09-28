@@ -24,6 +24,8 @@ void allocate( void **mem, uint32_t nWords );
 //void writeAddress(void **mem, uint32_t nWords, uint8_t _64bitMachine );
 
 uint32_t getValue(void);
+uint64_t getAddress(void);
+
 
 
 #endif /* MEMORY_MANIPULATION_H */

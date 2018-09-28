@@ -12,6 +12,7 @@ http://www.cplusplus.com/reference/cstdlib/strtoull/
 
 
 #include <stdint.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -30,6 +31,8 @@ int main( void )
   
   uint8_t _64bitMachine = FALSE;
   if (sizeOfmem > 4) _64bitMachine = TRUE;
+  uint64_t address = 0;
+
   printf("_64bitMachine: %d\n\r", _64bitMachine);
 
   printf("sizeof mem ptr: %d\n\r", sizeOfmem);
@@ -81,6 +84,20 @@ int main( void )
         {
           value = getValue();
           printf("value: %u,\n\r", value);
+          printf("enter hexadecimal address to write to\n\r");
+          fflush( stdout );
+          address = getAddress();
+          printf("address: %"PRIu64",\n\r", address);
+          //if(address > (uint64_t)(*mem+(32*(nWords-1))))
+          //{
+          //    printf("address too high.  must be between the beginning\n\r");
+          //    printf("of allocated space and 32 bits less the end of allocated space\n\r")
+          //    fflush(stdout);
+          //    continue
+          //}else
+          //  {
+          //    writeaddress()
+          //  }
           continue;
         }
         else
@@ -126,6 +143,38 @@ uint32_t getValue(void)
     //i = atoi (num);
   }
       return value; 
+
+}
+
+uint64_t getAddress(void)
+{
+  
+  
+  char addressCharray[16];
+  uint8_t incr = 0;
+  char ch;
+  uint64_t address = 0;
+  while( ((ch = getchar()) != '\n')&& incr != 16 )
+  {
+    
+    if( ('0' < ch || '9' > ch)||('a' < ch || 'f' > ch)||('A' < ch || 'F' > ch) )
+    {
+      addressCharray[incr] = ch;
+      printf("addr[%d]: %c\n\r", incr, addressCharray[incr]);
+      fflush( stdout );
+      incr++;
+    }
+    else(printf("invalid input: legal entries are 0-9, a-f, A-F"));
+    fflush( stdout );
+
+    address = strtoull(addressCharray, NULL, 16); 
+    //sscanf(valueCharray, "%u", &value);
+    printf("address: %"PRIu64" \n\r", address);
+    //return value; 
+
+    //i = atoi (num);
+  }
+      return address; 
 
 }
 

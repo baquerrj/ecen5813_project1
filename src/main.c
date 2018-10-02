@@ -261,8 +261,7 @@ uint32_t getNumberOfWords( void )
       printf( "%u words it is!\n\r", nWords );
       fflush( stdout );
    }
-
-   return nWords;
+  return nWords;
 }
 
 

@@ -1,16 +1,11 @@
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef MEMORY_MANIPULATION_H
+#define MEMORY_MANIPULATION_H
 
 #define MAX_INPUT_LENGTH 20
 
 /* Size of memory to allocate.
  * calculated in allocate() */
 uint32_t size = 0;
-
-/* Signal if input to stdin is in hex format
-   0: input is in hex format (false)
-   1: input is not in hex format (true) */
-uint8_t notHex = 0;
 
 /* Signal if we should allocate memory:
  * 0: prevents allocation
@@ -24,8 +19,9 @@ uint8_t doAllocate = 1;
 /* Print help menu */
 void help( void );
 
-/* Parse input hex value and returns uint32_t value */
-uint32_t parseHex( char* p_hex );
+uint32_t getValue( void );
+
+uint64_t getAddress( void );
 
 /* Parse input from stdin and returns uint32_t value */
 uint32_t getNumber( void );
@@ -39,6 +35,6 @@ void writeToMemory( void *p_address, uint32_t val );
 uint32_t getNumberOfWords( void );
 
 /* Allocate memory for specified number Returns pointer to memory location */
-void* allocate( uint32_t nWords );
+void allocate( void **mem, uint32_t nWords );
 
-#endif /* HELPER_H */
+#endif /* MEMORY_MANIPULATION_H */

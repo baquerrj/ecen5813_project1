@@ -10,6 +10,8 @@
 #include "../inc/getNumber.h"
 #include "../inc/writeToMemory.h"
 #include "../inc/getNumberOfWords.h"
+#include "../inc/getRandom.h"
+
 
 #define TRUE 1
 #define FALSE 0
@@ -25,6 +27,7 @@ int main( void )
   uint8_t doAllocate = 1;
   void* mem = NULL; //Addition of NULL
   uint8_t sizeOfmem = sizeof(mem);
+  const uint32_t MAX_UINT32 = 4294967295;
 
   uint8_t _64bitMachine = FALSE;
   if( sizeOfmem > 4 ) 
@@ -127,6 +130,45 @@ int main( void )
            */
            value = getValue();
            writeToMemory( currentAddress, value );
+
+           // Set back to 0 for next attempt
+           continue;
+        }
+        else if( ( 1 == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )
+        {
+          void* currentAddress = mem;
+           printf( "You are at address %p\n\r", currentAddress );
+           printf( "Input offset to address you'd like to write pattern to\n\r" );
+           fflush( stdout );
+           uint32_t offset = 0;
+           if( ( offset = getNumber() ) > ( size / 4 ) )
+           {
+              printf( "ERROR: Out of range of allocated memory!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+
+           while( 0 != offset )
+           {
+              currentAddress++;
+              offset--;
+           }
+
+           printf( "Input positive seed value for random number generation\n\r");
+           printf( "that fits in a 32 bit unsigned integer\n\r");
+
+           fflush( stdout );
+
+           uint32_t randomSeed = 0;
+           if( ( randomSeed = getNumber() ) > MAX_UINT32 )
+           {
+              printf( "ERROR: Out of range of allocated memory!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+           uint32_t random = 0;
+           random = getRandom(randomSeed);
+           writeToMemory( currentAddress, random );
 
            // Set back to 0 for next attempt
            continue;

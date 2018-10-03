@@ -154,8 +154,8 @@ int main( void )
            printf( "You are at address %p\n\r", currentAddress );
            printf( "Input offset to address you'd like to write pattern to\n\r" );
            fflush( stdout );
-           uint32_t offset = 0;
-           if( ( offset = getNumber() ) > ( size / 4 ) )
+           uint32_t offset = getNumber();
+           if( (nWords-1) < offset )
            {
               printf( "ERROR: Out of range of allocated memory!\n\r" );
               fflush( stdout );
@@ -173,7 +173,6 @@ int main( void )
 
            fflush( stdout );
 
-           
            if( ( randomSeed = getNumber() ) > MAX_UINT32 )
            {
               printf( "ERROR: too large!\n\r" );
@@ -183,17 +182,16 @@ int main( void )
            random = getRandom(randomSeed);
            writeToMemory( currentAddress, random );
 
-           // Set back to 0 for next attempt
            continue;
         }
         else if( ( 1 == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
         {
-          void* currentAddress = mem;
+           void* currentAddress = mem;
            printf( "You are at address %p\n\r", currentAddress );
            printf( "Input offset to address at which you'd like to verify pattern\n\r" );
            fflush( stdout );
-           uint32_t offset = 0;
-           if( ( offset = getNumber() ) > ( size / 4 ) )
+           uint32_t offset = getNumber();
+           if( (nWords-1) < offset )
            {
               printf( "ERROR: Out of range of allocated memory!\n\r" );
               fflush( stdout );
@@ -217,12 +215,10 @@ int main( void )
               fflush( stdout );
               continue;
            }
-           
+
            random = getRandom(randomSeed);
            verifyMemory(currentAddress, random);
-           //writeToMemory( currentAddress, random );
 
-           // Set back to 0 for next attempt
            continue;
         }
         else

@@ -71,7 +71,7 @@ int main( void )
            if( 1 == doAllocate )
            {
               size = allocate( &mem, nWords );
-              allocated = 1;
+              ( 0 < size ) ? ( allocated = 1 ) : ( allocated = 0 );
            }
            else
            {
@@ -98,8 +98,8 @@ int main( void )
            printf( "You are at address %p\n\r", currentAddress );
            printf( "Input offset to address you'd like to write to\n\r" );
            fflush( stdout );
-           uint8_t offset = 0;
-           if( ( offset = getNumber() ) > ( size / 4 ) )
+           uint32_t offset = getNumber();
+           if( (nWords-1) < offset )
            {
               printf( "ERROR: Out of range of allocated memory!\n\r" );
               fflush( stdout );
@@ -108,7 +108,7 @@ int main( void )
 
            while( 0 != offset )
            {
-              currentAddress++;
+              currentAddress += 32;
               offset--;
            }
 
@@ -120,18 +120,25 @@ int main( void )
         else if( ( 1 == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
         {
            void* currentAddress = mem;
-           printf( "Flip bits in all of allocated memory? Y/N\n\r" );
+           printf( "Specify number of 32-bit words to invert\n\r> " );
            fflush( stdout );
-           if( ( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) ) &&
-               ( 0 == strcmp( "Y\n", p_input ) ) )
+           uint32_t offset = getNumber();
+           if( nWords < offset )
            {
-              uint16_t iterations = 0;
-              while( nWords != iterations )
-              {
-                 invert( currentAddress );
-                 currentAddress += 32;
-                 iterations++;
-              }
+              printf( "ERROR: Input is larger than number of words allocated!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+           if( 0 == offset )
+           {
+              printf( "ERROR: Input must be a positive integer!\n\r" );
+              fflush( stdout );
+           }
+           while( 0 != offset )
+           {
+              invert( currentAddress );
+              currentAddress += 32;
+              offset--;
            }
            continue;
         }

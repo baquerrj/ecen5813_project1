@@ -1,4 +1,4 @@
-#include "../inc/help.h"
+#include "help.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>

@@ -1,4 +1,4 @@
-#include "../inc/getAddress.h"
+#include "getAddress.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>

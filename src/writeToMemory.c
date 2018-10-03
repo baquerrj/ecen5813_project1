@@ -1,4 +1,4 @@
-#include "../inc/writeToMemory.h"
+#include "writeToMemory.h"
 
 
 void writeToMemory( void *p_address, uint32_t val )

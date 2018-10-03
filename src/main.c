@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../inc/allocate.h"
-#include "../inc/help.h"
-#include "../inc/getValue.h"
-#include "../inc/getAddress.h"
-#include "../inc/getNumber.h"
-#include "../inc/writeToMemory.h"
-#include "../inc/getNumberOfWords.h"
+#include "allocate.h"
+#include "help.h"
+#include "getValue.h"
+#include "getAddress.h"
+#include "getNumber.h"
+#include "writeToMemory.h"
+#include "getNumberOfWords.h"
 
 #define TRUE 1
 #define FALSE 0

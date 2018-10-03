@@ -1,4 +1,4 @@
-#include "../inc/getValue.h"
+#include "getValue.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>

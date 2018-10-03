@@ -1,4 +1,4 @@
-#include "../inc/getValue.h"
+#include "getValue.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>
@@ -25,11 +25,10 @@ uint32_t getValue(void)
     }
     else
     {
-       printf("invalid input: legal entries are 0-9, a-f, A-F");
+       printf("invalid input [%c]: legal entries are 0-9, a-f, A-F\n\r", ch);
        fflush( stdout );
     }
     value = strtoul(valueCharray, NULL, 16); 
-    printf("value: %u \n\r", value);
   }
   return value; 
 }

@@ -3,16 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../inc/allocate.h"
-#include "../inc/help.h"
-#include "../inc/getValue.h"
-#include "../inc/getAddress.h"
-#include "../inc/getNumber.h"
-#include "../inc/writeToMemory.h"
-#include "../inc/getNumberOfWords.h"
-#include "../inc/getRandom.h"
-#include "../inc/verifyMemory.h"
 
+#include "allocate.h"
+#include "help.h"
+#include "getValue.h"
+#include "getAddress.h"
+#include "getNumber.h"
+#include "writeToMemory.h"
+#include "getNumberOfWords.h"
+#include "invert.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -77,7 +76,7 @@ int main( void )
            if( 1 == doAllocate )
            {
               size = allocate( &mem, nWords );
-              allocated = 1;
+              ( 0 < size ) ? ( allocated = 1 ) : ( allocated = 0 );
            }
            else
            {
@@ -104,8 +103,8 @@ int main( void )
            printf( "You are at address %p\n\r", currentAddress );
            printf( "Input offset to address you'd like to write to\n\r" );
            fflush( stdout );
-           uint8_t offset = 0;
-           if( ( offset = getNumber() ) > ( size / 4 ) )
+           uint32_t offset = getNumber();
+           if( (nWords-1) < offset )
            {
               printf( "ERROR: Out of range of allocated memory!\n\r" );
               fflush( stdout );
@@ -118,24 +117,34 @@ int main( void )
               offset--;
            }
 
-           /*printf( "What value would you like to write to address %p?\n\r", currentAddress );
-           printf( "Input must be in hexadecimal format: " );
-           fflush( stdout );
-           if( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) )
-           {
-              value = getValue();
-           }
-           else
-           {
-              printf( "ERROR: Could not read from stdin!\n\r" );
-              fflush( stdout );
-              continue;
-           }
-           */
            value = getValue();
            writeToMemory( currentAddress, value );
 
-           // Set back to 0 for next attempt
+           continue;
+        }
+        else if( ( 1 == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
+        {
+           void* currentAddress = mem;
+           printf( "Specify number of 32-bit words to invert\n\r> " );
+           fflush( stdout );
+           uint32_t offset = getNumber();
+           if( nWords < offset )
+           {
+              printf( "ERROR: Input is larger than number of words allocated!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+           if( 0 == offset )
+           {
+              printf( "ERROR: Input must be a positive integer!\n\r" );
+              fflush( stdout );
+           }
+           while( 0 != offset )
+           {
+              invert( currentAddress );
+              currentAddress += 32;
+              offset--;
+           }
            continue;
         }
         else if( ( 1 == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )

@@ -1,5 +1,5 @@
-#include "../inc/getNumberOfWords.h"
-#include "../inc/getNumber.h"
+#include "getNumberOfWords.h"
+#include "getNumber.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>

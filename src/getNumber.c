@@ -5,35 +5,21 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-
 uint32_t getNumber( void )
 {
    uint32_t num = 0;
    char ch;
    while( (ch = getchar()) != '\n' )
    {
-      if( ch == '-' )
+      if( ( ch == '-' ) || ( ch == '.' ) ||
+          ( ( 'A' <= ch ) && ( 'Z' >= ch ) ) ||
+          ( ( 'a' <= ch ) && ( 'z' >= ch ) ) )
       {
-         printf( "ERROR: Input cannot be a negative integer.\n\r" );
+         printf( "ERROR: Invalid input [%c]. Input must be a non-negative integer\n\r",
+                  ch );
          fflush( stdout );
-         //doAllocate = 0;
-         break;
-      }
-      else if( ch == '.' )
-      {
-         printf( "ERROR: Input must be an integer, not a double.\n\r" );
-         fflush( stdout );
-         //doAllocate = 0;
-         break;
-      }
-      else if( ( ( 'A' <= ch ) && ( 'Z' >= ch ) ) ||
-               ( ( 'a' <= ch ) && ( 'z' >= ch ) ) )
-      {
-         printf( "ERROR: Input must be an integer, not words!\n\r" );
-         fflush( stdout );
-         //doAllocate = 0;
-         break;
+         while( (ch = getchar()) != '\n' );
+         return 0;
       }
       if( '9' < ch || '0' > ch )
       {

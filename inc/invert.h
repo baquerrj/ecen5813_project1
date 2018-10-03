@@ -1,9 +1,7 @@
 #ifndef INVERT_H
 #define INVERT_H
 #include <stdint.h>
-#include <inttypes.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 #define ANDMASK 0xFFFFFFFF

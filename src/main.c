@@ -10,6 +10,7 @@
 #include "getNumber.h"
 #include "writeToMemory.h"
 #include "getNumberOfWords.h"
+#include "invert.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -111,24 +112,27 @@ int main( void )
               offset--;
            }
 
-           /*printf( "What value would you like to write to address %p?\n\r", currentAddress );
-           printf( "Input must be in hexadecimal format: " );
-           fflush( stdout );
-           if( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) )
-           {
-              value = getValue();
-           }
-           else
-           {
-              printf( "ERROR: Could not read from stdin!\n\r" );
-              fflush( stdout );
-              continue;
-           }
-           */
            value = getValue();
            writeToMemory( currentAddress, value );
 
-           // Set back to 0 for next attempt
+           continue;
+        }
+        else if( ( 1 == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
+        {
+           void* currentAddress = mem;
+           printf( "Flip bits in all of allocated memory? Y/N\n\r" );
+           fflush( stdout );
+           if( ( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) ) &&
+               ( 0 == strcmp( "Y\n", p_input ) ) )
+           {
+              uint16_t iterations = 0;
+              while( nWords != iterations )
+              {
+                 invert( currentAddress );
+                 currentAddress += 32;
+                 iterations++;
+              }
+           }
            continue;
         }
         else

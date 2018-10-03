@@ -7,7 +7,7 @@
 
 uint32_t getValue(void)
 {
-  printf("what is the value that you would like to write to memory.\n\r");
+  printf("What is the value that you would like to write to memory.\n\r");
   printf("Must be 32 bit unsigned integer in hex format, or 8 legal characters.\n\r");
   fflush( stdout );
   char valueCharray[8];

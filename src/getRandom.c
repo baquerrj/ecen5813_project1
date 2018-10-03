@@ -1,4 +1,4 @@
-#include "../inc/getRandom.h"
+#include "getRandom.h"
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>

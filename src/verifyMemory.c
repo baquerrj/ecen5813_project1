@@ -1,5 +1,4 @@
-#include "../inc/verifyMemory.h"
-//#include "../inc/getRandom.h"
+#include "verifyMemory.h"
 
 
 void verifyMemory( void *p_address, uint32_t random )

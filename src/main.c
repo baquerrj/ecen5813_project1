@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #include "allocate.h"
 #include "help.h"
 #include "getValue.h"
@@ -11,6 +10,8 @@
 #include "getNumber.h"
 #include "writeToMemory.h"
 #include "getNumberOfWords.h"
+#include "verifyMemory.h"
+#include "getRandom.h"
 #include "invert.h"
 
 #define TRUE 1

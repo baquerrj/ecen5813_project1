@@ -2,6 +2,7 @@
 # Makefile for memory fun utility #
 ###################################
 
+
 CFLAGS= -Wall -Werror -Wextra -g -std=c99
 
 INC_DIR= ./inc

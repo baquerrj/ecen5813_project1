@@ -16,20 +16,19 @@ uint32_t getValue(void)
   uint32_t value = 0;
   while( ((ch = getchar()) != '\n') && incr != 8 )
   {
-     if( ( '0' < ch && '9' > ch ) ||
-         ( 'a' < ch && 'f' > ch ) ||
-         ( 'A' < ch && 'F' > ch ) )
+     if( ( '0' <= ch && '9' >= ch ) ||
+         ( 'a' <= ch && 'f' >= ch ) ||
+         ( 'A' <= ch && 'F' >= ch ) )
     {
       valueCharray[incr] = ch;
       incr++;
     }
     else
     {
-       printf("invalid input: legal entries are 0-9, a-f, A-F");
+       printf("invalid input [%c]: legal entries are 0-9, a-f, A-F\n\r", ch);
        fflush( stdout );
     }
     value = strtoul(valueCharray, NULL, 16); 
-    printf("value: %u \n\r", value);
   }
   return value; 
 }

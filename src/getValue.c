@@ -16,9 +16,9 @@ uint32_t getValue(void)
   uint32_t value = 0;
   while( ((ch = getchar()) != '\n') && incr != 8 )
   {
-     if( ( '0' < ch && '9' > ch ) ||
-         ( 'a' < ch && 'f' > ch ) ||
-         ( 'A' < ch && 'F' > ch ) )
+     if( ( '0' <= ch && '9' >= ch ) ||
+         ( 'a' <= ch && 'f' >= ch ) ||
+         ( 'A' <= ch && 'F' >= ch ) )
     {
       valueCharray[incr] = ch;
       incr++;

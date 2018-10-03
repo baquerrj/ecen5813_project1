@@ -11,6 +11,7 @@
 #include "../inc/writeToMemory.h"
 #include "../inc/getNumberOfWords.h"
 #include "../inc/getRandom.h"
+#include "../inc/verifyMemory.h"
 
 
 #define TRUE 1
@@ -28,6 +29,9 @@ int main( void )
   void* mem = NULL; //Addition of NULL
   uint8_t sizeOfmem = sizeof(mem);
   const uint32_t MAX_UINT32 = 4294967295;
+  uint32_t randomSeed = 0;
+  uint32_t random = 0;
+  //uint8_t seedOnce = 0;//only permit the seeding of the random number generator once
 
   uint8_t _64bitMachine = FALSE;
   if( sizeOfmem > 4 ) 
@@ -110,7 +114,7 @@ int main( void )
 
            while( 0 != offset )
            {
-              currentAddress++;
+              currentAddress += 32;
               offset--;
            }
 
@@ -150,7 +154,7 @@ int main( void )
 
            while( 0 != offset )
            {
-              currentAddress++;
+              currentAddress += 32;
               offset--;
            }
 
@@ -159,16 +163,54 @@ int main( void )
 
            fflush( stdout );
 
-           uint32_t randomSeed = 0;
+           
            if( ( randomSeed = getNumber() ) > MAX_UINT32 )
+           {
+              printf( "ERROR: too large!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+           random = getRandom(randomSeed);
+           writeToMemory( currentAddress, random );
+
+           // Set back to 0 for next attempt
+           continue;
+        }
+        else if( ( 1 == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
+        {
+          void* currentAddress = mem;
+           printf( "You are at address %p\n\r", currentAddress );
+           printf( "Input offset to address at which you'd like to verify pattern\n\r" );
+           fflush( stdout );
+           uint32_t offset = 0;
+           if( ( offset = getNumber() ) > ( size / 4 ) )
            {
               printf( "ERROR: Out of range of allocated memory!\n\r" );
               fflush( stdout );
               continue;
            }
-           uint32_t random = 0;
+
+           while( 0 != offset )
+           {
+              currentAddress += 32;
+              offset--;
+           }
+
+           printf( "Input positive seed value to verify against random number generation.\n\r");
+           printf( "It mush fit in a 32 bit unsigned integer\n\r");
+
+           fflush( stdout );
+
+           if( ( randomSeed = getNumber() ) > MAX_UINT32 )
+           {
+              printf( "ERROR: too large!\n\r" );
+              fflush( stdout );
+              continue;
+           }
+           
            random = getRandom(randomSeed);
-           writeToMemory( currentAddress, random );
+           verifyMemory(currentAddress, random);
+           //writeToMemory( currentAddress, random );
 
            // Set back to 0 for next attempt
            continue;

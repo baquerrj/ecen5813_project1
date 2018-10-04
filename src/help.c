@@ -22,6 +22,7 @@ void help( void )
   printf( "'free' - free allocated memory\n\r" );
   printf( "'invert' - invert the state of all bits in specified memory\n\r" );
   printf( "'write' - proceed to prompt for address to write to, followed by value to write\n\r" );
+  printf( "'display' - proceed to prompt for address to display\n\r");
   printf( "'writePattern' - proceed to prompt for offset to address to write to,");
   printf("followed by seed value for random number generator \n\r" );
   printf( "'verifyPattern' - proceed to prompt for offset to address to access,"); 

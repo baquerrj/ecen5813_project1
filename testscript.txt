@@ -5,6 +5,9 @@ write
 N
 0
 ffffffff
+display
+N
+0
 invert
 1
 1

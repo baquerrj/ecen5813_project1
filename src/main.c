@@ -165,17 +165,80 @@ int main( void )
 
             continue;
          }
+         else if( 0 == strcmp( "display\n", p_input ) )
+         {
+            if( TRUE == allocated )
+            {
+               void* currentAddress = mem;
+               uint32_t offset = 0;
+               printf( "You are at address %p\n\r", currentAddress );
+               printf( "Displayspecific address, or by offset? Y/N\n\r> ");
+               fflush( stdout );
+
+               if( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) )
+               {
+                  if( 0 == strcmp( "Y\n", p_input ) )
+                  {
+                     printf( "Enter hexadecimal address to display to\n\r> " );
+                     fflush( stdout);
+                     uint64_t address = getAddress();
+                     if( ( ( (uint64_t)mem + (32*(nWords-1) ) ) < address ) || 
+                           ( (uint64_t)mem > address ) ||
+                           ( 0 != ( address - (uint64_t)mem ) % 32 ) )
+                     {
+                        printf( "ERROR: Out of range of allocated memory!\n\r" );
+                        fflush( stdout );
+                        continue;
+                  }
+                  offset = ( address - (uint64_t)mem ) / 32;
+                  }
+                  else
+                  {
+                     printf( "Input offset to address you'd like to display\n\r" );
+                     fflush( stdout );
+                     offset = getNumber();
+                     if( (nWords-1) < offset )
+                     {
+                        printf( "ERROR: Out of range of allocated memory!\n\r" );
+                        fflush( stdout );
+                        continue;
+                     }
+                  }
+                  while( 0 != offset )
+                  {
+                     currentAddress += 32;
+                     offset--;
+                  }
+               }
+               printf( "Value 0x%08x or %u is written to address %p\n\r",
+                       *(uint32_t*)currentAddress, *(uint32_t*)currentAddress,
+                       currentAddress );
+               fflush( stdout );
+            }
+            else
+            {
+               printf( "You can't write to memory with allocating some first!\n\r" );
+               fflush( stdout );
+            }
+
+            continue;
+         }
          else if( 0 == strcmp( "invert\n", p_input ) )
          {
             if( TRUE == allocated )
             {
                void* currentAddress = mem;
-               printf( "Specify number of 32-bit words to invert\n\r> " );
+               printf( "You are at address %p\n\r", currentAddress );
+               printf( "Specifiy offset to address you'd like to start inverting from\n\r> ");
                fflush( stdout );
                uint32_t offset = getNumber();
-               if( nWords < offset )
+
+               printf( "Specify number of 32-bit words to invert\n\r> " );
+               fflush( stdout );
+               uint32_t wordsToInvert = getNumber();
+               if( (nWords-wordsToInvert) < offset )
                {
-                  printf( "ERROR: Input is larger than number of words allocated!\n\r" );
+                  printf( "ERROR: Out of range of allocated memory!!\n\r" );
                   fflush( stdout );
                   continue;
                }
@@ -185,12 +248,17 @@ int main( void )
                   fflush( stdout );
                }
 
-               start = clock();
                while( 0 != offset )
+               {
+                  currentAddress += 32;
+                  offset--;
+               }
+               start = clock();
+               while( 0 != wordsToInvert )
                {
                   invert( currentAddress );
                   currentAddress += 32;
-                  offset--;
+                  wordsToInvert--;
                }
                end = clock();
 
@@ -278,7 +346,7 @@ int main( void )
                }
 
                printf( "Input positive seed value to verify against random number generation.\n\r");
-               printf( "It mush fit in a 32 bit unsigned integer\n\r> ");
+               printf( "It must fit in a 32 bit unsigned integer\n\r> ");
 
                fflush( stdout );
 

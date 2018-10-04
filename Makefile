@@ -29,6 +29,9 @@ $(RES_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/%.h
 	mkdir -p ./res
 	gcc -I$(INC_DIR) $(CFLAGS) -c -o "$@" "$<"
 
+test: util testscript.txt
+	./bin/util < testscript.txt
+
 clean: 
 	rm -f ./bin/*
 	rm -f ./res/*

@@ -230,7 +230,7 @@ int main( void )
             }
 
             printf( "Input positive seed value to verify against random number generation.\n\r");
-            printf( "It mush fit in a 32 bit unsigned integer\n\r> ");
+            printf( "It must fit in a 32 bit unsigned integer\n\r> ");
 
             fflush( stdout );
 
@@ -247,7 +247,7 @@ int main( void )
             end = clock();
 
             delta = (double)( end - start ) / CLOCKS_PER_SEC;
-            printf( "Very pattern operation took %f seconds\n\r", delta );
+            printf( "Verify pattern operation took %f seconds\n\r", delta );
             continue;
          }
          else

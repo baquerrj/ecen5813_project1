@@ -1,3 +1,14 @@
+/*FileName: getNumber.c
+*Description: Retrieves user input and converts to uint32_t and returns converted value
+*Authors: Robert Baquerizo, Vance Farren
+*Tools: 
+*   Linker: GNU 
+*   Compiler: GCC 
+*   Debugger: NONE
+*Leveraged Code:
+*Links:
+*/
+
 #include "getNumber.h"
 #include <stdio.h>
 #include <stdlib.h>

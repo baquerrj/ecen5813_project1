@@ -1,3 +1,15 @@
+/*FileName:getNumberOfWords.c
+*Description: This function takes no input but returns a uint32_t representing the number of words
+*    of memory to allocate
+*Authors: Robert Baquerizo, Vance Farren
+*Tools: 
+*   Linker: GNU 
+*   Compiler: GCC 
+*   Debugger: NONE
+*Leveraged Code:
+*Links:
+*/
+
 #include "getNumberOfWords.h"
 #include "getNumber.h"
 #include <stdio.h>

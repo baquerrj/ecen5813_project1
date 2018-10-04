@@ -1,6 +1,13 @@
 ###################################
 # Makefile for memory fun utility #
 ###################################
+#Description: This is the makefile for Project 1
+#Authors: Roberto Baquerizo, Vance Farren
+#Tools: Make, gcc
+#Links: https://www.gnu.org/software/make/manual/make.html
+#
+#
+#
 
 
 CFLAGS= -Wall -Werror -Wextra -g -std=c99

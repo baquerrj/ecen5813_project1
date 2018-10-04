@@ -1,3 +1,14 @@
+/*FileName:help.c
+*Description: This function prints the help menu. There is no input nor return value.
+*Authors: Robert Baquerizo, Vance Farren
+*Tools: 
+*   Linker: GNU 
+*   Compiler: GCC 
+*   Debugger: NONE
+*Leveraged Code:
+*Links:
+*/
+
 #include "help.h"
 #include <stdio.h>
 

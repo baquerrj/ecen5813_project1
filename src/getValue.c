@@ -1,3 +1,15 @@
+/*FileName:getValue.c
+*Description: This function gets user input.  Input must be in hex and is
+*   the value to be written to memory.
+*Authors: Robert Baquerizo, Vance Farren
+*Tools: 
+*   Linker: GNU 
+*   Compiler: GCC 
+*   Debugger: NONE
+*Leveraged Code:
+*Links:
+*/
+
 #include "getValue.h"
 #include <stdio.h>
 #include <stdlib.h>

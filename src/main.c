@@ -1,3 +1,14 @@
+/*FileName: main.c
+*Description:  This is the entrance to the program.  It takes no inputs and returns 0.
+*Authors: Robert Baquerizo, Vance Farren
+*Tools: 
+*   Linker: GNU 
+*   Compiler: GCC 
+*   Debugger: NONE
+*Leveraged Code:
+*Links:
+*/
+
 #include "allocate.h"
 #include "help.h"
 #include "getValue.h"

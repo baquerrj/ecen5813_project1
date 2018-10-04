@@ -1,8 +1,3 @@
-#include <stdint.h>
-#include <inttypes.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "allocate.h"
 #include "help.h"
 #include "getValue.h"
@@ -25,7 +20,6 @@ int main( void )
    uint8_t allocated = 0;
    uint32_t nWords = 0;
    uint32_t value = 0;
-   uint8_t doAllocate = 1;
    void* mem = NULL; //Addition of NULL
    uint8_t sizeOfmem = sizeof(mem);
    const uint32_t MAX_UINT32 = 4294967295;
@@ -75,12 +69,8 @@ int main( void )
             nWords = getNumberOfWords();
             if( 0 != nWords )
             {
-               if( 1 == doAllocate )
-               {
-                  size = allocate( &mem, nWords );
-                  ( 0 < size ) ? ( allocated = 1 ) : ( allocated = 0 );
-                  ( 1 == allocated ) ? ( doAllocate = 0 ): ( doAllocate = 1 );
-               }
+               size = allocate( &mem, nWords );
+               ( 0 < size ) ? ( allocated = 1 ) : ( allocated = 0 );
             }
             else
             {
@@ -89,7 +79,6 @@ int main( void )
                continue;
             }
             // Reset for next attempt
-            doAllocate = 1;
             continue;
          }
          else if( ( 1 == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
@@ -98,7 +87,6 @@ int main( void )
             fflush( stdout );
             free( mem );
             allocated = 0;
-            doAllocate = 1;
             continue;
          }
          else if( ( 1 == allocated ) && ( 0 == strcmp( "write\n", p_input ) ) )

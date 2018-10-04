@@ -91,174 +91,218 @@ int main( void )
             }
             continue;
          }
-         else if( ( TRUE == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
+         else if( 0 == strcmp( "free\n", p_input ) )
          {
-            printf( "Freeing %u byes of memory\n\r", size );
-            fflush( stdout );
-            free( mem );
-            allocated = FALSE;
+            if( TRUE == allocated )
+            {
+               printf( "Freeing %u byes of memory\n\r", size );
+               fflush( stdout );
+               free( mem );
+               allocated = FALSE;
+               continue;
+            }
+            else
+            {
+               printf( "You cannot free memory without allocating first!\n\r" );
+               fflush( stdout );
+               continue;
+            }
+         }
+         else if( 0 == strcmp( "write\n", p_input ) )
+         {
+            if( TRUE == allocated )
+            {
+               void* currentAddress = mem;
+               uint32_t offset = 0;
+               printf( "You are at address %p\n\r", currentAddress );
+               printf( "Write to specific address, or by offset? Y/N\n\r> ");
+               fflush( stdout );
+
+               if( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) )
+               {
+                  if( 0 == strcmp( "Y\n", p_input ) )
+                  {
+                     printf( "Enter hexadecimal address to write to\n\r> " );
+                     fflush( stdout);
+                     uint64_t address = getAddress();
+                     if( ( ( (uint64_t)mem + (32*(nWords-1) ) ) < address ) || 
+                           ( (uint64_t)mem > address ) ||
+                           ( 0 != ( address - (uint64_t)mem ) % 32 ) )
+                     {
+                        printf( "ERROR: Out of range of allocated memory!\n\r" );
+                        fflush( stdout );
+                        continue;
+                  }
+                  offset = ( address - (uint64_t)mem ) / 32;
+                  }
+                  else
+                  {
+                     printf( "Input offset to address you'd like to write to\n\r" );
+                     fflush( stdout );
+                     offset = getNumber();
+                     if( (nWords-1) < offset )
+                     {
+                        printf( "ERROR: Out of range of allocated memory!\n\r" );
+                        fflush( stdout );
+                        continue;
+                     }
+                  }
+                  while( 0 != offset )
+                  {
+                     currentAddress += 32;
+                     offset--;
+                  }
+               }
+
+               value = getValue();
+               writeToMemory( currentAddress, value );
+            }
+            else
+            {
+               printf( "You can't write to memory with allocating some first!\n\r" );
+               fflush( stdout );
+            }
+
             continue;
          }
-         else if( ( TRUE == allocated ) && ( 0 == strcmp( "write\n", p_input ) ) )
+         else if( 0 == strcmp( "invert\n", p_input ) )
          {
-            void* currentAddress = mem;
-            uint32_t offset = 0;
-            printf( "You are at address %p\n\r", currentAddress );
-            printf( "Write to specific address, or by offset? Y/N\n\r> ");
-            fflush( stdout );
-
-            if( NULL != fgets( p_input, MAX_INPUT_LENGTH, stdin ) )
+            if( TRUE == allocated )
             {
-               if( 0 == strcmp( "Y\n", p_input ) )
+               void* currentAddress = mem;
+               printf( "Specify number of 32-bit words to invert\n\r> " );
+               fflush( stdout );
+               uint32_t offset = getNumber();
+               if( nWords < offset )
                {
-                  printf( "Enter hexadecimal address to write to\n\r> " );
-                  fflush( stdout);
-                  uint64_t address = getAddress();
-                  if( ( ( (uint64_t)mem + (32*(nWords-1) ) ) < address ) || 
-                      ( (uint64_t)mem > address ) ||
-                      ( 0 != ( address - (uint64_t)mem ) % 32 ) )
-                  {
-                     printf( "ERROR: Out of range of allocated memory!\n\r" );
-                     fflush( stdout );
-                     continue;
-                  }
-                  offset = ( address - (uint64_t)mem )/ 32;
-               }
-               else
-               {
-                  printf( "Input offset to address you'd like to write to\n\r" );
+                  printf( "ERROR: Input is larger than number of words allocated!\n\r" );
                   fflush( stdout );
-                  offset = getNumber();
-                  if( (nWords-1) < offset )
-                  {
-                     printf( "ERROR: Out of range of allocated memory!\n\r" );
-                     fflush( stdout );
-                     continue;
-                  }
+                  continue;
                }
+               if( 0 == offset )
+               {
+                  printf( "ERROR: Input must be a positive integer!\n\r" );
+                  fflush( stdout );
+               }
+
+               start = clock();
+               while( 0 != offset )
+               {
+                  invert( currentAddress );
+                  currentAddress += 32;
+                  offset--;
+               }
+               end = clock();
+
+               delta = (double)( end - start ) / CLOCKS_PER_SEC;
+               printf( "Invert operation took %f seconds\n\r", delta );
+               fflush( stdout );
+            }
+            else
+            {
+               printf( "You can't invert memory without allocating some first!\n\r" );
+               fflush( stdout );
+            }
+            continue;
+         }
+         else if( 0 == strcmp( "writePattern\n", p_input ) )
+         {
+            if( TRUE == allocated )
+            {
+               void* currentAddress = mem;
+               printf( "You are at address %p\n\r", currentAddress );
+               printf( "Input offset to address you'd like to write pattern to\n\r> " );
+               fflush( stdout );
+               uint32_t offset = getNumber();
+               if( (nWords-1) < offset )
+               {
+                  printf( "ERROR: Out of range of allocated memory!\n\r" );
+                  fflush( stdout );
+                  continue;
+               }
+
                while( 0 != offset )
                {
                   currentAddress += 32;
                   offset--;
                }
+
+               printf( "Input positive seed value for random number generation\n\r");
+               printf( "Input must fit in a 32 bit unsigned integer\n\r> ");
+
+               fflush( stdout );
+
+               if( ( randomSeed = getNumber() ) > UINT32_MAX )
+               {
+                  printf( "ERROR: too large!\n\r" );
+                  fflush( stdout );
+                  continue;
+               }
+
+               start = clock();
+               random = getRandom(randomSeed);
+               writeToMemory( currentAddress, random );
+               end = clock();
+
+               delta = (double)( end - start ) / CLOCKS_PER_SEC;
+               printf( "Write pattern operation took %f seconds\n\r", delta );
+               fflush( stdout );
             }
-
-            value = getValue();
-            writeToMemory( currentAddress, value );
-
+            else
+            {
+               printf( "You can't write to memory without allocating some first!\n\r" );
+               fflush( stdout );
+            }
             continue;
          }
-         else if( ( TRUE == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
+         else if( 0 == strcmp( "verifyPattern\n", p_input ) )
          {
-            void* currentAddress = mem;
-            printf( "Specify number of 32-bit words to invert\n\r> " );
-            fflush( stdout );
-            uint32_t offset = getNumber();
-            if( nWords < offset )
+            if( TRUE == allocated )
             {
-               printf( "ERROR: Input is larger than number of words allocated!\n\r" );
+               void* currentAddress = mem;
+               printf( "You are at address %p\n\r", currentAddress );
+               printf( "Input offset to address at which you'd like to verify pattern\n\r> " );
                fflush( stdout );
-               continue;
-            }
-            if( 0 == offset )
-            {
-               printf( "ERROR: Input must be a positive integer!\n\r" );
+               uint32_t offset = getNumber();
+               if( (nWords-1) < offset )
+               {
+                  printf( "ERROR: Out of range of allocated memory!\n\r" );
+                  fflush( stdout );
+                  continue;
+               }
+
+               while( 0 != offset )
+               {
+                  currentAddress += 32;
+                  offset--;
+               }
+
+               printf( "Input positive seed value to verify against random number generation.\n\r");
+               printf( "It mush fit in a 32 bit unsigned integer\n\r> ");
+
+               fflush( stdout );
+
+               if( ( randomSeed = getNumber() ) > UINT32_MAX )
+               {
+                  printf( "ERROR: too large!\n\r" );
+                  fflush( stdout );
+                  continue;
+               }
+
+               start = clock();
+               random = getRandom(randomSeed);
+               verifyMemory(currentAddress, random);
+               end = clock();
+
+               delta = (double)( end - start ) / CLOCKS_PER_SEC;
+               printf( "Very pattern operation took %f seconds\n\r", delta );
                fflush( stdout );
             }
-
-            start = clock();
-            while( 0 != offset )
+            else
             {
-               invert( currentAddress );
-               currentAddress += 32;
-               offset--;
-            }
-            end = clock();
-
-            delta = (double)( end - start ) / CLOCKS_PER_SEC;
-            printf( "Invert operation took %f seconds\n\r", delta );
-            continue;
-         }
-         else if( ( TRUE == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )
-         {
-            void* currentAddress = mem;
-            printf( "You are at address %p\n\r", currentAddress );
-            printf( "Input offset to address you'd like to write pattern to\n\r> " );
-            fflush( stdout );
-            uint32_t offset = getNumber();
-            if( (nWords-1) < offset )
-            {
-               printf( "ERROR: Out of range of allocated memory!\n\r" );
+               printf( "You haven't allocated memory yet!\n\r" );
                fflush( stdout );
-               continue;
             }
-
-            while( 0 != offset )
-            {
-               currentAddress += 32;
-               offset--;
-            }
-
-            printf( "Input positive seed value for random number generation\n\r");
-            printf( "Input must fit in a 32 bit unsigned integer\n\r> ");
-
-            fflush( stdout );
-
-            if( ( randomSeed = getNumber() ) > UINT32_MAX )
-            {
-               printf( "ERROR: too large!\n\r" );
-               fflush( stdout );
-               continue;
-            }
-
-            start = clock();
-            random = getRandom(randomSeed);
-            writeToMemory( currentAddress, random );
-            end = clock();
-
-            delta = (double)( end - start ) / CLOCKS_PER_SEC;
-            printf( "Write pattern operation took %f seconds\n\r", delta );
-            continue;
-         }
-         else if( ( TRUE == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
-         {
-            void* currentAddress = mem;
-            printf( "You are at address %p\n\r", currentAddress );
-            printf( "Input offset to address at which you'd like to verify pattern\n\r> " );
-            fflush( stdout );
-            uint32_t offset = getNumber();
-            if( (nWords-1) < offset )
-            {
-               printf( "ERROR: Out of range of allocated memory!\n\r" );
-               fflush( stdout );
-               continue;
-            }
-
-            while( 0 != offset )
-            {
-               currentAddress += 32;
-               offset--;
-            }
-
-            printf( "Input positive seed value to verify against random number generation.\n\r");
-            printf( "It must fit in a 32 bit unsigned integer\n\r> ");
-
-            fflush( stdout );
-
-            if( ( randomSeed = getNumber() ) > UINT32_MAX )
-            {
-               printf( "ERROR: too large!\n\r" );
-               fflush( stdout );
-               continue;
-            }
-
-            start = clock();
-            random = getRandom(randomSeed);
-            verifyMemory(currentAddress, random);
-            end = clock();
-
-            delta = (double)( end - start ) / CLOCKS_PER_SEC;
-            printf( "Verify pattern operation took %f seconds\n\r", delta );
             continue;
          }
          else

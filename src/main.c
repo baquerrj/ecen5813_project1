@@ -17,24 +17,12 @@ int main( void )
 {
    char* p_input = (char*) calloc( MAX_INPUT_LENGTH, sizeof( char* ) );
    uint32_t size = 0;
-   uint8_t allocated = 0;
+   uint8_t allocated = FALSE;
    uint32_t nWords = 0;
    uint32_t value = 0;
-   void* mem = NULL; //Addition of NULL
-   uint8_t sizeOfmem = sizeof(mem);
-   const uint32_t MAX_UINT32 = 4294967295;
+   void* mem = NULL;
    uint32_t randomSeed = 0;
    uint32_t random = 0;
-
-   uint8_t _64bitMachine = FALSE;
-   if( sizeOfmem > 4 ) 
-   {
-      _64bitMachine = TRUE;
-   }
-
-   printf("_64bitMachine: %d\n\r", _64bitMachine);
-
-   printf("sizeof mem ptr: %d\n\r", sizeOfmem);
 
    printf( "Hello and welcome! Enter 'help' for help menu\n\r" );
    fflush( stdout ); 
@@ -52,7 +40,7 @@ int main( void )
          }
          else if( 0 == strcmp( "quit\n", p_input ) )
          {
-            if( 1 == allocated )
+            if( TRUE == allocated )
             {
                printf( "You have not freed memory!\n\r" );
                printf( "Doing your work for you..\n\r" );
@@ -64,32 +52,39 @@ int main( void )
             printf( "Exiting...");
             break;
          }
-         else if( ( 0 == allocated ) && ( 0 == strcmp( "allocate\n", p_input ) ) )
+         else if( 0 == strcmp( "allocate\n", p_input ) )
          {
-            nWords = getNumberOfWords();
-            if( 0 != nWords )
+            if( FALSE == allocated )
             {
-               size = allocate( &mem, nWords );
-               ( 0 < size ) ? ( allocated = 1 ) : ( allocated = 0 );
+               nWords = getNumberOfWords();
+               if( 0 != nWords )
+               {
+                  size = allocate( &mem, nWords );
+                  ( 0 < size ) ? ( allocated = TRUE ) : ( allocated = FALSE );
+               }
+               else
+               {
+                  printf( "Did not allocate any memory. You probably did bad things...\n\r >" );
+                  fflush( stdout );
+                  continue;
+               }
             }
             else
             {
-               printf( "Did not allocate any memory. You probably did bad things...\n\r" );
+               printf( "You already allocated memory!\n\r");
                fflush( stdout );
-               continue;
             }
-            // Reset for next attempt
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
+         else if( ( TRUE == allocated ) && ( 0 == strcmp( "free\n", p_input ) ) )
          {
             printf( "Freeing %u byes of memory\n\r", size );
             fflush( stdout );
             free( mem );
-            allocated = 0;
+            allocated = FALSE;
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "write\n", p_input ) ) )
+         else if( ( TRUE == allocated ) && ( 0 == strcmp( "write\n", p_input ) ) )
          {
             void* currentAddress = mem;
             uint32_t offset = 0;
@@ -138,7 +133,7 @@ int main( void )
 
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
+         else if( ( TRUE == allocated ) && ( 0 == strcmp( "invert\n", p_input ) ) )
          {
             void* currentAddress = mem;
             printf( "Specify number of 32-bit words to invert\n\r> " );
@@ -163,11 +158,11 @@ int main( void )
             }
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )
+         else if( ( TRUE == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )
          {
             void* currentAddress = mem;
             printf( "You are at address %p\n\r", currentAddress );
-            printf( "Input offset to address you'd like to write pattern to\n\r" );
+            printf( "Input offset to address you'd like to write pattern to\n\r> " );
             fflush( stdout );
             uint32_t offset = getNumber();
             if( (nWords-1) < offset )
@@ -184,11 +179,11 @@ int main( void )
             }
 
             printf( "Input positive seed value for random number generation\n\r");
-            printf( "that fits in a 32 bit unsigned integer\n\r");
+            printf( "Input must fit in a 32 bit unsigned integer\n\r> ");
 
             fflush( stdout );
 
-            if( ( randomSeed = getNumber() ) > MAX_UINT32 )
+            if( ( randomSeed = getNumber() ) > UINT32_MAX )
             {
                printf( "ERROR: too large!\n\r" );
                fflush( stdout );
@@ -199,11 +194,11 @@ int main( void )
 
             continue;
          }
-         else if( ( 1 == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
+         else if( ( TRUE == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
          {
             void* currentAddress = mem;
             printf( "You are at address %p\n\r", currentAddress );
-            printf( "Input offset to address at which you'd like to verify pattern\n\r" );
+            printf( "Input offset to address at which you'd like to verify pattern\n\r> " );
             fflush( stdout );
             uint32_t offset = getNumber();
             if( (nWords-1) < offset )
@@ -220,11 +215,11 @@ int main( void )
             }
 
             printf( "Input positive seed value to verify against random number generation.\n\r");
-            printf( "It mush fit in a 32 bit unsigned integer\n\r");
+            printf( "It mush fit in a 32 bit unsigned integer\n\r> ");
 
             fflush( stdout );
 
-            if( ( randomSeed = getNumber() ) > MAX_UINT32 )
+            if( ( randomSeed = getNumber() ) > UINT32_MAX )
             {
                printf( "ERROR: too large!\n\r" );
                fflush( stdout );

@@ -1,10 +1,6 @@
 #include "getAddress.h"
-#include <stdint.h>
-#include <inttypes.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 
 uint64_t getAddress(void)
 {

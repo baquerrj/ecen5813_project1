@@ -1,4 +1,6 @@
 #include "invert.h"
+#include <stdio.h>
+#include <stdint.h>
 
 void invert( void *p_address )
 {

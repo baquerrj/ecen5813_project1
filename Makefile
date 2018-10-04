@@ -14,8 +14,12 @@ util: $(OBJS)
 	mkdir -p ./bin
 	gcc -o ./bin/util $(OBJS) $(CFLAGS)
 
-$(RES_DIR)/%.o: $(SRC_DIR)/%.c
+$(RES_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/%.h
 	mkdir -p ./res 
+	gcc -I$(INC_DIR) $(CFLAGS) -c -o "$@" "$<"
+
+./res/main.o: ./src/main.c
+	mkdir -p ./res
 	gcc -I$(INC_DIR) $(CFLAGS) -c -o "$@" "$<"
 
 clean: 

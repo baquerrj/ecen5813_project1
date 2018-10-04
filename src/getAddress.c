@@ -1,10 +1,6 @@
 #include "getAddress.h"
-#include <stdint.h>
-#include <inttypes.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 
 uint64_t getAddress(void)
 {
@@ -21,9 +17,11 @@ uint64_t getAddress(void)
       addressCharray[incr] = ch;
       incr++;
     }
-    else(printf("invalid input: legal entries are 0-9, a-f, A-F"));
-    fflush( stdout );
-
+    else
+    {
+       printf( "Invalid input [%c]: legal entries are 0-9, a-f, A-F\n\r", ch );
+       fflush( stdout );
+    }
     address = strtoull(addressCharray, NULL, 16); 
   }
   return address;

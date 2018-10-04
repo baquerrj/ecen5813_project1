@@ -1,9 +1,5 @@
 #include "allocate.h"
-#include <stdint.h>
-#include <inttypes.h>
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 
 uint32_t allocate( void **mem, uint32_t nWords )

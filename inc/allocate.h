@@ -1,9 +1,6 @@
 #ifndef ALLOCATE_H
 #define ALLOCATE_H
 #include <stdint.h>
-#include <inttypes.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 /* Allocate memory for specified number Returns pointer to memory location */

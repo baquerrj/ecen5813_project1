@@ -1,5 +1,5 @@
 #include "verifyMemory.h"
-
+#include <stdio.h>
 
 void verifyMemory( void *p_address, uint32_t random )
 {
@@ -14,7 +14,5 @@ void verifyMemory( void *p_address, uint32_t random )
        printf("actual value is: %x\n\r ",*((uint32_t*)p_address));
        printf("memory address of discrepancy: %p\n\r", p_address);
    }
-  // printf( "Writing value of 0x%x or %u to memory address %p\n\r", val, val, p_address );
-  // printf( "Value %u is written to memory adress %p\n\r", *(uint32_t*)p_address, p_address );
    return;
 }

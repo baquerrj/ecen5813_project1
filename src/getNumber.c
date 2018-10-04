@@ -1,8 +1,5 @@
 #include "getNumber.h"
-#include <stdint.h>
-#include <inttypes.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 uint32_t getNumber( void )

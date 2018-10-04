@@ -8,6 +8,7 @@
 #include "verifyMemory.h"
 #include "getRandom.h"
 #include "invert.h"
+#include <time.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -24,6 +25,9 @@ int main( void )
    uint32_t randomSeed = 0;
    uint32_t random = 0;
 
+   /* For calculating time taken to perform operations */
+   clock_t start, end;
+   double delta;
    printf( "Hello and welcome! Enter 'help' for help menu\n\r" );
    fflush( stdout ); 
 
@@ -150,12 +154,18 @@ int main( void )
                printf( "ERROR: Input must be a positive integer!\n\r" );
                fflush( stdout );
             }
+
+            start = clock();
             while( 0 != offset )
             {
                invert( currentAddress );
                currentAddress += 32;
                offset--;
             }
+            end = clock();
+
+            delta = (double)( end - start ) / CLOCKS_PER_SEC;
+            printf( "Invert operation took %f seconds\n\r", delta );
             continue;
          }
          else if( ( TRUE == allocated ) && ( 0 == strcmp( "writePattern\n", p_input ) ) )
@@ -189,9 +199,14 @@ int main( void )
                fflush( stdout );
                continue;
             }
+
+            start = clock();
             random = getRandom(randomSeed);
             writeToMemory( currentAddress, random );
+            end = clock();
 
+            delta = (double)( end - start ) / CLOCKS_PER_SEC;
+            printf( "Write pattern operation took %f seconds\n\r", delta );
             continue;
          }
          else if( ( TRUE == allocated ) && ( 0 == strcmp( "verifyPattern\n", p_input ) ) )
@@ -226,9 +241,13 @@ int main( void )
                continue;
             }
 
+            start = clock();
             random = getRandom(randomSeed);
             verifyMemory(currentAddress, random);
+            end = clock();
 
+            delta = (double)( end - start ) / CLOCKS_PER_SEC;
+            printf( "Very pattern operation took %f seconds\n\r", delta );
             continue;
          }
          else
